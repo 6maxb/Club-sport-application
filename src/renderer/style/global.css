@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+body {
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+#app {
+  min-height: 100vh;
+}

@@ -1,0 +1,150 @@
+// Schéma Prisma principal décrivant la base MariaDB du club
+generator client {
+  provider = "prisma-client-ts"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Adresse {
+  id         Int      @id @default(autoincrement()) @map("ID_adresse")
+  rue        String   @map("Rue")
+  codePostal String   @map("Code_postal")
+  ville      String   @map("Ville")
+  pays       String   @map("Pays") @default("France")
+
+  membres Membre[]
+
+  @@map("Adresse")
+}
+
+model Terrain {
+  id           Int      @id @default(autoincrement()) @map("ID_terrain")
+  nom          String   @map("Nom")
+  surface      Decimal? @map("Surface")   @db.Decimal(10, 2)
+  couvert      Boolean  @map("Couvert")   @default(false)
+  eclairage    Boolean  @map("Eclairage") @default(false)
+  localisation String?  @map("Localisation")
+
+  reservations Reservation[]
+  cours        Cours[]
+
+  @@map("Terrain")
+}
+
+model Membre {
+  id            Int       @id @default(autoincrement()) @map("ID_membre")
+  adresseId     Int       @map("ID_adresse")
+  nom           String    @map("Nom")
+  prenom        String    @map("Prenom")
+  dateNaissance DateTime  @map("Date_naissance") @db.Date
+  email         String    @map("Email") @unique
+  telephone     String?   @map("Telephone")
+  estEntraineur Boolean   @map("Est_entraineur") @default(false)
+  specialite    String?   @map("Specialite")
+  estActif      Boolean   @map("Est_actif") @default(true)
+
+  adresse      Adresse       @relation(fields: [adresseId], references: [id])
+  adhesions    Adhesion[]
+  reservations Reservation[]
+  participations Participe[] @relation("ParticipeMembre")
+  animations     Anime[]     @relation("AnimeMembre")
+
+  @@map("Membre")
+}
+
+model Adhesion {
+  id         Int      @id @default(autoincrement()) @map("ID_adhesion")
+  membreId   Int      @map("ID_membre")
+  type       String   @map("Type_adhesion")
+  dateDebut  DateTime @map("Date_debut") @db.Date
+  dateFin    DateTime @map("Date_fin")   @db.Date
+
+  membre    Membre    @relation(fields: [membreId], references: [id])
+  paiements Paiement[] @relation("PaiementAdhesion")
+
+  @@map("Adhesions")
+  @@index([membreId], map: "idx_adhesion_membre")
+}
+
+model Reservation {
+  id              Int      @id @default(autoincrement()) @map("ID_reservation")
+  membreId        Int      @map("ID_membre")
+  terrainId       Int      @map("ID_terrain")
+  dateReservation DateTime @map("Date_reservation") @db.Date
+  heureDebut      DateTime @map("Heure_debut")       @db.Time(0)
+  heureFin        DateTime @map("Heure_fin")         @db.Time(0)
+  statut          String   @map("Statut") @default("Confirmée")
+  dateCreation    DateTime @map("Date_creation") @default(now())
+
+  membre    Membre    @relation(fields: [membreId], references: [id])
+  terrain   Terrain   @relation(fields: [terrainId], references: [id])
+  paiements Paiement[] @relation("PaiementReservation")
+
+  @@map("Reservation")
+  @@index([dateReservation], map: "idx_reservation_date")
+}
+
+model Cours {
+  id        Int      @id @default(autoincrement()) @map("ID_cours")
+  terrainId Int      @map("ID_terrain")
+  titre     String   @map("Titre")
+  niveau    String   @map("Niveau")
+  dateHeure DateTime @map("Date_heure")
+  duree     Int      @map("Duree")
+  capacite  Int      @map("Capacite")
+
+  terrain      Terrain      @relation(fields: [terrainId], references: [id])
+  participants Participe[]  @relation("ParticipeCours")
+  animateurs   Anime[]      @relation("AnimeCours")
+  paiements    Paiement[]   @relation("PaiementCours")
+
+  @@map("Cours")
+  @@index([dateHeure], map: "idx_cours_date")
+}
+
+model Paiement {
+  id           Int       @id @default(autoincrement()) @map("ID_paiement")
+  adhesionId   Int?      @map("ID_adhesion")
+  reservationId Int?     @map("ID_reservation")
+  coursId      Int?      @map("ID_cours")
+  montant      Decimal   @map("Montant")      @db.Decimal(10, 2)
+  datePaiement DateTime  @map("Date_paiement") @db.Date
+  typePaiement String?   @map("Type_paiement")
+  modePaiement String?   @map("Mode_paiement")
+
+  adhesion    Adhesion?    @relation(fields: [adhesionId], references: [id], name: "PaiementAdhesion")
+  reservation Reservation? @relation(fields: [reservationId], references: [id], name: "PaiementReservation")
+  cours       Cours?       @relation(fields: [coursId], references: [id], name: "PaiementCours")
+
+  @@map("Paiements")
+}
+
+model Participe {
+  membreId Int      @map("ID_membre")
+  coursId  Int      @map("ID_cours")
+  statut   String   @map("Statut") @default("Inscrit")
+  dateInscription DateTime @map("Date_inscription") @default(now())
+
+  membre Membre @relation(fields: [membreId], references: [id], name: "ParticipeMembre")
+  cours  Cours  @relation(fields: [coursId], references: [id], name: "ParticipeCours")
+
+  @@id([membreId, coursId])
+  @@map("Participe")
+}
+
+model Anime {
+  membreId     Int      @map("ID_membre")
+  coursId      Int      @map("ID_cours")
+  role         String   @map("Role") @default("Principal")
+  remuneration Decimal? @map("Remuneration") @db.Decimal(10, 2)
+
+  membre Membre @relation(fields: [membreId], references: [id], name: "AnimeMembre")
+  cours  Cours  @relation(fields: [coursId], references: [id], name: "AnimeCours")
+
+  @@id([membreId, coursId])
+  @@map("Anime")
+}
