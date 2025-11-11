@@ -1,5 +1,5 @@
 // Encapsule les accès Prisma pour les adresses (CRUD + mapping vers l'interface partagée)
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Adresse from "src/shared/adresse";
 

@@ -1,5 +1,5 @@
 // Centralise les règles métiers liées aux paiements (un seul lien possible et montant positif)
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Paiement from "src/shared/paiement";
 

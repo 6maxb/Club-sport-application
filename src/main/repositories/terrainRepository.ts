@@ -1,5 +1,5 @@
 // Gestion des terrains : CRUD Prisma + utilitaire pour la disponibilité
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Terrain from "src/shared/terrain";
 

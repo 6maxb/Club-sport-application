@@ -1,5 +1,5 @@
 // Repository Prisma pour les adhésions : expose les requêtes et le mapping vers le modèle partagé
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Adhesion from "src/shared/adhesion";
 

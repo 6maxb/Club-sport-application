@@ -1,5 +1,5 @@
 // Repository principal pour le module réservation : validations + disponibilité terrain
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Reservation from "src/shared/reservation";
 

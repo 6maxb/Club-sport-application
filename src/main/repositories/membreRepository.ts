@@ -1,5 +1,5 @@
 // Gère les accès Prisma pour l'entité Membre (filtrage actifs/entraîneurs inclus)
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Membre from "src/shared/membre";
 

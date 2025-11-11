@@ -1,7 +1,6 @@
 // Schéma Prisma principal décrivant la base MariaDB du club
 generator client {
-  provider = "prisma-client-ts"
-  output   = "./generated"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -19,6 +18,7 @@ model Adresse {
   membres Membre[]
 
   @@map("Adresse")
+  @@unique([rue, codePostal, ville, pays], map: "uniq_adresse_postale")
 }
 
 model Terrain {
@@ -33,6 +33,7 @@ model Terrain {
   cours        Cours[]
 
   @@map("Terrain")
+  @@unique([nom, localisation], map: "uniq_terrain_nom_localisation")
 }
 
 model Membre {
@@ -86,6 +87,7 @@ model Reservation {
 
   @@map("Reservation")
   @@index([dateReservation], map: "idx_reservation_date")
+  @@unique([membreId, terrainId, dateReservation, heureDebut, heureFin], map: "uniq_reservation_creneau")
 }
 
 model Cours {
@@ -104,6 +106,7 @@ model Cours {
 
   @@map("Cours")
   @@index([dateHeure], map: "idx_cours_date")
+  @@unique([terrainId, dateHeure, titre], map: "uniq_cours_terrain_datetime_titre")
 }
 
 model Paiement {

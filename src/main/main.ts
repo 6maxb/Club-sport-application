@@ -1,6 +1,6 @@
 // Point d'entrée du process principal : charge l'UI et initialise les repositories Prisma
 import { app, BrowserWindow } from 'electron';
-import path from 'node:path';
+import * as path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { registerRepositories } from './registerRepositories';
 import * as dotenv from 'dotenv';

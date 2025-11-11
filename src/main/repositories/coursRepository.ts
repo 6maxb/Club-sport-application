@@ -1,5 +1,5 @@
 // Contient la logique métier des cours : gestion des participants, animateurs et conflits de planning
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Cours from "src/shared/cours";
 

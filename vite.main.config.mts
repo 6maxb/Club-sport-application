@@ -12,4 +12,18 @@ export default defineConfig({
       src: resolve(__dirname, 'src'),
     },
   },
+  build: {
+    // Évite que Prisma (client généré + runtime) soit bundlé dans main.
+    // Cela contourne un bug d'interop avec `node:process` dans le bundle CJS.
+    rollupOptions: {
+      external: (id: string) => {
+        return (
+          id.includes('src/main/repositories/prisma/generated') ||
+          id === '@prisma/client' ||
+          id.startsWith('@prisma/')
+        );
+      },
+    },
+    target: 'node18',
+  },
 });

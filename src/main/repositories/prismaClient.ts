@@ -1,6 +1,6 @@
 // Fournit une instance unique du PrismaClient configurée avec l'adaptateur MariaDB
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "./prisma/generated/client";
+import { PrismaClient } from "@prisma/client";
 
 let prismaClient: PrismaClient | null = null;
 
