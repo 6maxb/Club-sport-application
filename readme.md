@@ -1,6 +1,6 @@
 # Club Tennis App
 
-Application Electron/Vue pour la gestion d'un club de tennis.
+Application Electron/Vue pour la gestion d'un club de sport.
 
 ## Installation
 
