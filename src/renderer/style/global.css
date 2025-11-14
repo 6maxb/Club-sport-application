@@ -19,3 +19,5 @@ body {
 #app {
   min-height: 100vh;
 }
+
+/* (Revert) pas de règle globale intrusive sur les thead */

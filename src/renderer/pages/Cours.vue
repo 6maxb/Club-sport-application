@@ -443,6 +443,8 @@ const ouvrirEditionRemuneration = async (animateur: Anime) => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  /* Empêche les éléments internes (ex: thead) de déborder sur les panneaux voisins */
+  position: relative;
 }
 
 .table {
@@ -461,6 +463,10 @@ const ouvrirEditionRemuneration = async (animateur: Anime) => {
   color: #f8fafc;
   text-align: left;
 }
+
+/* S'assure que le panneau de gauche (liste des cours) reste au-dessus en cas de chevauchement */
+.page__content.grid > .panel:nth-of-type(1) { z-index: 2; }
+.page__content.grid > .panel:nth-of-type(2) { z-index: 1; overflow: hidden; }
 
 .table tr.selected {
   background: rgba(37, 99, 235, 0.15);
@@ -517,6 +523,32 @@ dialog {
   background: #0f172a;
   color: #e2e8f0;
   padding: 1.5rem;
+}
+
+/* Mise en page spécifique: Participants sous la liste, Animateurs à droite */
+.page__content.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-auto-rows: minmax(0, auto);
+  gap: 1.5rem;
+}
+
+/* 1 = Liste des cours | 2 = Participants | 3 = Animateurs */
+.page__content.grid > .panel:nth-of-type(1) {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  overflow-x: hidden; /* empêche tout débordement horizontal du thead */
+}
+
+.page__content.grid > .panel:nth-of-type(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.page__content.grid > .panel:nth-of-type(3) {
+  grid-column: 2;
+  grid-row: 1 / span 2;
 }
 
 dialog::backdrop {
