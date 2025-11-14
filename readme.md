@@ -28,8 +28,3 @@ npm start
 - `src/main` : process principal Electron, Prisma.
 - `src/preload` : services exposés à la renderer.
 - `src/renderer` : UI Vue 3 (router, pages, composables).
-
-## TODO / Points d'attention
-
-- Warning TypeScript (`LibraryOptions` dans `@electron-forge/plugin-vite`) : causé par la version du plugin vs Vite. À résoudre en alignant les versions ou en ajoutant un type override.
-- Améliorer les validations/front (toasts, loaders) et compléter les écrans selon besoins.
