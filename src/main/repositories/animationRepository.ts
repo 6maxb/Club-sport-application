@@ -1,4 +1,5 @@
-import { PrismaClient } from "./prisma/generated/client";
+// Aligner le type client avec getPrismaClient() qui retourne @prisma/client
+import { PrismaClient } from "@prisma/client";
 import { getPrismaClient } from "./prismaClient";
 import Anime from "src/shared/anime";
 
