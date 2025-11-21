@@ -35,30 +35,49 @@
       </div>
 
       <table class="table" v-if="animateurs.length">
-        <thead>
-          <tr>
-            <th>Membre</th>
-            <th>Rôle</th>
-            <th>Rémunération</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="animateur in animateurs" :key="animateur.membreId + '-' + animateur.coursId">
-            <td>{{ afficherMembre(animateur.membreId) }}</td>
-            <td>{{ animateur.role }}</td>
-            <td>{{ animateur.remuneration ?? "-" }}</td>
-            <td class="actions">
-              <button @click="modifierRole(animateur)">Modifier rôle</button>
-              <button @click="modifierRemuneration(animateur)">Modifier rémunération</button>
-              <button class="danger" @click="retirerAnimateur(animateur)">Retirer</button>
-            </td>
-          </tr>
-        </tbody>
+          <thead>
+            <tr>
+              <th>Membre</th>
+              <th>Rôle</th>
+              <th>Rémunération</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="animateur in animateurs" :key="animateur.membreId + '-' + animateur.coursId">
+              <td>{{ afficherMembre(animateur.membreId) }}</td>
+              <td>{{ animateur.role }}</td>
+              <td>{{ animateur.remuneration ?? "-" }}</td>
+              <td class="actions">
+                <button type="button" @click.stop="modifierRole(animateur)">Modifier rôle</button>
+                <button type="button" @click.stop="modifierRemuneration(animateur)">Modifier rémunération</button>
+                <button type="button" class="danger" @click.stop="retirerAnimateur(animateur)">Retirer</button>
+              </td>
+            </tr>
+          </tbody>
       </table>
 
       <p v-else-if="coursSelectionne">Aucun animateur assigné pour ce cours.</p>
       <p v-else>Sélectionnez un cours pour afficher les animateurs.</p>
+
+      <!-- Petit dialogue d'édition réutilisé pour rôle/rémunération -->
+      <dialog ref="editDialogRef">
+        <form method="dialog" @submit.prevent="enregistrerEdition">
+          <h3>{{ modeEdition === 'role' ? 'Modifier le rôle' : 'Modifier la rémunération' }}</h3>
+          <div v-if="modeEdition === 'role'" class="form-group">
+            <label>Nouveau rôle</label>
+            <input v-model="roleEdition" type="text" required />
+          </div>
+          <div v-else class="form-group">
+            <label>Nouvelle rémunération (€)</label>
+            <input v-model="remunerationEdition" type="number" min="0" step="0.01" required />
+          </div>
+          <div class="actions">
+            <button type="submit">Enregistrer</button>
+            <button type="button" @click="fermerEdition">Annuler</button>
+          </div>
+        </form>
+      </dialog>
     </section>
   </div>
 </template>
@@ -79,6 +98,13 @@ const coursSelectionne = ref<number | "">("");
 const entraineurSelectionne = ref<number | "">("");
 const role = ref<string>("Principal");
 const remuneration = ref<number | "">("");
+
+// Etat minimal pour l'édition via un <dialog> (évite prompt() non supporté)
+const editDialogRef = ref<HTMLDialogElement | null>(null);
+const animateurEnEdition = ref<Anime | null>(null);
+const modeEdition = ref<"role" | "remuneration" | "">("");
+const roleEdition = ref("");
+const remunerationEdition = ref("");
 
 const entraineursDisponibles = computed(() =>
   membres.value.filter((m) => m.estEntraineur && !animateurs.value.some((a) => a.membreId === m.id)),
@@ -121,23 +147,42 @@ const retirerAnimateur = async (animateur: Anime) => {
   }
 };
 
-const modifierRole = async (animateur: Anime) => {
-  const nouveauRole = prompt("Nouveau rôle", animateur.role);
-  if (!nouveauRole || !coursSelectionne.value) return;
-  await mettreAJourRole(animateur.coursId, animateur.membreId, nouveauRole);
-  await charger();
+const modifierRole = (animateur: Anime) => {
+  animateurEnEdition.value = animateur;
+  modeEdition.value = "role";
+  roleEdition.value = animateur.role;
+  editDialogRef.value?.showModal();
 };
 
-const modifierRemuneration = async (animateur: Anime) => {
-  const valeur = prompt(
-    "Nouvelle rémunération (laisser vide pour aucune)",
-    animateur.remuneration?.toString() ?? "",
-  );
-  if (valeur === null || !coursSelectionne.value) return;
-  const montant = valeur.trim() === "" ? 0 : Number(valeur);
-  if (Number.isNaN(montant)) return;
-  await mettreAJourRemuneration(animateur.coursId, animateur.membreId, montant);
+const modifierRemuneration = (animateur: Anime) => {
+  animateurEnEdition.value = animateur;
+  modeEdition.value = "remuneration";
+  remunerationEdition.value = animateur.remuneration?.toString() ?? "";
+  editDialogRef.value?.showModal();
+};
+
+const fermerEdition = () => {
+  editDialogRef.value?.close();
+  animateurEnEdition.value = null;
+  modeEdition.value = "";
+};
+
+const enregistrerEdition = async () => {
+  if (!animateurEnEdition.value) return;
+  const a = animateurEnEdition.value;
+  if (modeEdition.value === "role") {
+    const nouveauRole = roleEdition.value.trim();
+    if (!nouveauRole) return;
+    await mettreAJourRole(a.coursId, a.membreId, nouveauRole);
+  } else if (modeEdition.value === "remuneration") {
+    const val = remunerationEdition.value.trim();
+    if (val === "") return; // pas de changement si vide
+    const montant = Number(val);
+    if (!Number.isFinite(montant)) return;
+    await mettreAJourRemuneration(a.coursId, a.membreId, montant);
+  }
   await charger();
+  fermerEdition();
 };
 
 const afficherMembre = (id: number) => {
@@ -231,4 +276,6 @@ button.danger {
   background: #dc2626;
   color: white;
 }
+
+/* aucun z-index spécial requis ici */
 </style>
