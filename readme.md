@@ -37,12 +37,12 @@ Ces commandes créent les tables dans votre base locale et génèrent le client 
 ## 3) Lancer l'application
 Dans le terminal, toujours à la racine du projet :
 ```bash
-npm start
+npm run start
 ```
 Une fenêtre de l'application s'ouvre. L'interface est responsive et permet d'ajouter, modifier, supprimer et consulter les données (CRUD) : membres, adresses, terrains, réservations, cours, adhésions, paiements, participants, animateurs.
 
 ## En cas de blocage fréquent
-- Port occupé (erreur sur 5173) : fermer les autres fenêtres de l'application ou redémarrer puis relancer `npm start`.
+- Port occupé (erreur sur 5173) : fermer les autres fenêtres de l'application ou redémarrer puis relancer `npm run start`.
 - Connexion base de données : vérifier `DATABASE_URL` dans `.env` (utilisateur, mot de passe, nom de base). Assurez-vous que MariaDB/MySQL est démarré.
 - Si la base est vide après installation, relancer les commandes Prisma du point 2.
 
@@ -52,5 +52,5 @@ Une fenêtre de l'application s'ouvre. L'interface est responsive et permet d'aj
 - Architecture : `main` (Electron), `preload` (passerelle sécurisée), `renderer` (Vue 3).
 
 ## Scripts npm disponibles
-- `npm start` : lancer l'application.
+- `npm run start` : lancer l'application.
 - `npm run make` / `npm run package` : produire des exécutables (optionnel, pour distribution).
