@@ -2,7 +2,7 @@
 <template>
   <div class="layout">
     <aside class="sidebar">
-      <h1>Club de tennis</h1>
+      <h1>Club de sport</h1>
       <nav>
         <RouterLink to="/">Tableau de bord</RouterLink>
         <RouterLink to="/membres">Membres</RouterLink>

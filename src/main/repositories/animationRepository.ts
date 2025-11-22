@@ -93,10 +93,12 @@ export class AnimationRepository {
     coursId: number;
     role: string;
     remuneration: any;
-  }): Anime => ({
-    membreId: record.membreId,
-    coursId: record.coursId,
-    role: record.role,
-    remuneration: record.remuneration !== null ? Number(record.remuneration) : undefined,
-  });
+  }): Anime => {
+    return {
+      membreId: record.membreId,
+      coursId: record.coursId,
+      role: record.role,
+      remuneration: record.remuneration !== null ? Number(record.remuneration) : undefined,
+    };
+  };
 }
