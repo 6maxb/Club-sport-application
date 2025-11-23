@@ -2,7 +2,7 @@
 
 Application de bureau (Electron + Vue) pour gérer un club sportif. Aucune dépendance cloud : les données restent sur votre machine (base MariaDB/MySQL).
 
-## Prérequis (pour quelqu'un qui n'est pas technicien)
+## Prérequis
 - Un ordinateur avec macOS ou Windows.
 - Node.js installé (version 18+ recommandée). Si vous ne l'avez pas, téléchargez-le sur https://nodejs.org et installez-le en suivant les écrans.
 - MariaDB ou MySQL **Server** installé localement (pas seulement Workbench).
