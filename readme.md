@@ -5,9 +5,9 @@ Application de bureau (Electron + Vue) pour gérer un club sportif. Aucune dépe
 ## Prérequis (pour quelqu'un qui n'est pas technicien)
 - Un ordinateur avec macOS ou Windows.
 - Node.js installé (version 18+ recommandée). Si vous ne l'avez pas, téléchargez-le sur https://nodejs.org et installez-le en suivant les écrans.
-- MariaDB ou MySQL installé localement.
-  - macOS : https://mariadb.com/downloads/ (pkg) ou https://dev.mysql.com/downloads/mysql/
-  - Windows : https://mariadb.com/downloads/ (MSI) ou https://dev.mysql.com/downloads/mysql/
+- MariaDB ou MySQL **Server** installé localement (pas seulement Workbench).
+  - macOS : https://mariadb.com/downloads/ (pkg) ou MySQL Community Server sur https://dev.mysql.com/downloads/mysql/
+  - Windows : https://mariadb.com/downloads/ (MSI) ou MySQL Community Server sur https://dev.mysql.com/downloads/mysql/
   Pendant l'installation du serveur (MySQL Server/MariaDB Server), choisissez un utilisateur (souvent `root`) et un mot de passe : gardez-les précieusement, ils seront utilisés dans `DATABASE_URL`.
 
 ### Créer la base (une fois)
