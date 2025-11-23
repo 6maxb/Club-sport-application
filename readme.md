@@ -5,10 +5,22 @@ Application de bureau (Electron + Vue) pour gérer un club sportif. Aucune dépe
 ## Prérequis (pour quelqu'un qui n'est pas technicien)
 - Un ordinateur avec macOS ou Windows.
 - Node.js installé (version 18+ recommandée). Si vous ne l'avez pas, téléchargez-le sur https://nodejs.org et installez-le en suivant les écrans.
-- MariaDB ou MySQL installé localement. Pendant l'installation, notez :
-  - le nom d'utilisateur (souvent `root`)
-  - le mot de passe
-  - le nom de la base que vous allez créer (ex. `gestion_club`)
+- MariaDB ou MySQL installé localement.
+  - macOS : https://mariadb.com/downloads/ (pkg) ou https://dev.mysql.com/downloads/mysql/
+  - Windows : https://mariadb.com/downloads/ (MSI) ou https://dev.mysql.com/downloads/mysql/
+  Pendant l'installation du serveur (MySQL Server/MariaDB Server), choisissez un utilisateur (souvent `root`) et un mot de passe : gardez-les précieusement, ils seront utilisés dans `DATABASE_URL`.
+
+### Créer la base (une fois)
+1. Ouvrez l'application fournie avec MariaDB/MySQL (ex. MySQL Workbench) ou un terminal.
+2. Connectez-vous avec l'utilisateur/mot de passe choisis.
+3. Créez la base en tapant :
+   ```sql
+   CREATE DATABASE gestion_club;
+   ```
+
+### Démarrer le serveur MariaDB/MySQL
+- macOS (Homebrew) : `brew services start mariadb` (ou mysql).
+- Windows : lancer le service “MariaDB” ou “MySQL” dans les Services, ou redémarrer la machine après installation (le service démarre en général automatiquement).
 
 ## 1) Installer l'application
 1. Ouvrir le dossier du projet `club-sport-app`.
